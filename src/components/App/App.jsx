@@ -3,36 +3,37 @@ import axios from "axios";
 import { Audio } from "react-loader-spinner";
 import css from "./App.module.css";
 import ArticleList from "../ArticleList/ArticleList";
+import { fetchArticlesWithTopic } from "../../../src/articles-api";
+import SearchForm from "../SearchForm";
 
 const App = () => {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    async function fetchArticles() {
-      try {
-        setLoading(true);
-        const response = await axios.get(
-          "https://hn.algolia.com/api/v1/search?query=react"
-        );
-        setArticles(response.data.hits);
-      } catch (error) {
-        /////
-      } finally {
-        setLoading(false);
-      }
+  const [error, setError] = useState(false);
+  const handleSearch = async (topic) => {
+    try {
+      setArticles([]);
+      setError(false);
+      setLoading(true);
+      const data = await fetchArticlesWithTopic(topic);
+      setArticles(data);
+    } catch (error) {
+      setError(true);
+    } finally {
+      setLoading(false);
     }
-
-    fetchArticles();
-  }, []);
+  };
 
   return (
     <div>
-      <h1>Latest articles</h1>
+      <SearchForm onSearch={handleSearch} />
       {loading && (
         <div>
           <Audio />
         </div>
+      )}
+      {error && (
+        <p>Whoops, something went wrong! Please try reloading this page!</p>
       )}
       {articles.length > 0 && <ArticleList items={articles} />}
     </div>
