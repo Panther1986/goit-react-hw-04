@@ -1,6 +1,7 @@
-import axios from "axios";
+import { createApi } from "unsplash-js";
+import nodeFetch from "node-fetch";
 
-axios.defaults.baseURL = "https://hn.algolia.com/api/v1";
+unsplash.defaults.baseURL = "https://hn.algolia.com/api/v1";
 
 export const fetchArticlesWithTopic = async (topic) => {
   const response = axios.get(`search?query=${topic}`);
