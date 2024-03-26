@@ -5,23 +5,39 @@ import css from "./App.module.css";
 import SearchBar from "../SearchBar/SearchBar";
 import ImageGallery from "../ImageGallery/ImageGallery";
 import { createApi } from "unsplash-js";
-// import nodeFetch from "node-fetch";
-
-const API_URL = "https://api.unsplash.com/photos/";
-
-const MY_KEY = "3E1uqS10ft75HtW6n-WWxNngOMkfjOfuZz96c8u9lqU";
+import Loader from "../Loader/Loader";
 
 const App = () => {
   const [articles, setArticles] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
   useEffect(() => {
     async function fetchArticles() {
-      const response = await fetch(
-        `https://api.unsplash.com/photos/random?client_id=${MY_KEY}`
-      );
-      const data = await response.json();
-      console.log(data);
-
-      // setArticles(response.data.hits);
+      try {
+        const MY_KEY = "3E1uqS10ft75HtW6n-WWxNngOMkfjOfuZz96c8u9lqU";
+        const params = {
+          client_id: MY_KEY,
+          query: query,
+          orientation: "landscape",
+          page: pageNum,
+          per_page: 12,
+        };
+        setLoading(true);
+        const response = await axios.get(
+          `https://api.unsplash.com/search/photos/`,
+          {
+            params: params,
+            headers: {
+              Authorization: `Client-ID ${MY_KEY}`,
+            },
+          }
+        );
+        setArticles(response.data.hits);
+      } catch (error) {
+        setError(true);
+      } finally {
+        setLoading(false);
+      }
     }
     fetchArticles();
   }, []);
@@ -29,17 +45,12 @@ const App = () => {
   return (
     <div>
       <SearchBar />
-      {articles.length > 0 && (
-        <ul>
-          {articles.map(({ id, urls, alt_description }) => (
-            <li key={id}>
-              <a href={urls.full} target="_blank" rel="noreferrer noopener">
-                {alt_description}
-              </a>
-            </li>
-          ))}
-        </ul>
+      {loading && (
+        <div>
+          <Loader />
+        </div>
       )}
+      {articles.length > 0 && <ImageGallery items={articles} />}
     </div>
   );
 };
