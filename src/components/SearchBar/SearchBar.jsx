@@ -1,17 +1,19 @@
+import { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
+import { GoSearch } from "react-icons/go";
 import css from "./SearchBar.module.css";
 
 const SearchBar = ({ onSubmit }) => {
+  const [query, setQuery] = useState("");
   const handleSubmit = (e) => {
     e.preventDefault();
-    const form = e.target;
-    const userText = form.elements.input.value;
-    if (form.elements.input.value.trim() === "") {
+
+    if (query.trim() === "") {
       toast.error("Please enter search image!");
       return;
     }
-    onSubmit(userText);
-    form.reset();
+    onSubmit(query);
+    setQuery("");
   };
   return (
     <header>
@@ -21,10 +23,12 @@ const SearchBar = ({ onSubmit }) => {
           autoComplete="off"
           autoFocus
           placeholder="Search images and photos"
-          name="input"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
         />
         <button type="submit">Search</button>
       </form>
+      <Toaster position={"top-right"} />
     </header>
   );
 };

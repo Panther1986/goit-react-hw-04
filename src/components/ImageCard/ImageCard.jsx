@@ -1,8 +1,16 @@
-const ImageCard = ({ url, title }) => {
+const ImageCard = ({ imageUrl, alt, onClick }) => {
   return (
-    <div>
-      <img src={url} alt={title} />
-    </div>
+    <li>
+      <div>
+        <img
+          src={imageUrl}
+          alt={alt}
+          onClick={onClick}
+          width="320"
+          height="200"
+        />
+      </div>
+    </li>
   );
 };
 
