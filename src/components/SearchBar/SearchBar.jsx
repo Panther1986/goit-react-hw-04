@@ -3,7 +3,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { GoSearch } from "react-icons/go";
 import css from "./SearchBar.module.css";
 
-const SearchBar = ({ onSubmit }) => {
+const SearchBar = ({ onSubmit, userNovalidValue }) => {
   const [query, setQuery] = useState("");
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -16,9 +16,10 @@ const SearchBar = ({ onSubmit }) => {
     setQuery("");
   };
   return (
-    <header>
-      <form onSubmit={handleSubmit}>
+    <header className={css.headerContainer}>
+      <form className={css.formSearch} onSubmit={handleSubmit}>
         <input
+          className={css.inputSearch}
           type="text"
           autoComplete="off"
           autoFocus
@@ -26,7 +27,9 @@ const SearchBar = ({ onSubmit }) => {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
         />
-        <button type="submit">Search</button>
+        <button className={css.btnSearch} type="submit">
+          Search
+        </button>
       </form>
       <Toaster position={"top-right"} />
     </header>

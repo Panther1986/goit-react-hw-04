@@ -1,3 +1,4 @@
+import css from "./ImageCard.module.css";
 const ImageCard = ({ imageUrl, alt, onClick, likes, create }) => {
   return (
     <li>
@@ -9,8 +10,8 @@ const ImageCard = ({ imageUrl, alt, onClick, likes, create }) => {
           width="320"
           height="200"
         />
-        <p>Data of create: {create}</p>
-        <p>Likes: {likes}</p>
+        <p className={css.imageText}>Data of create: {create}</p>
+        <p className={css.imageText}>Likes: {likes}</p>
       </div>
     </li>
   );

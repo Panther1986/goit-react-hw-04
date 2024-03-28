@@ -98,7 +98,7 @@ const App = () => {
   };
 
   return (
-    <div>
+    <div className={css.mainContainer}>
       <SearchBar onSubmit={handleSearch} />
       {loading && <Loader />}
       {error && <ErrorMessage />}
