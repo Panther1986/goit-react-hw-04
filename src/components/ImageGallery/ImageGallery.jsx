@@ -9,6 +9,8 @@ const ImageGallery = ({ images, onClick }) => {
           key={image.id}
           imageUrl={image.small}
           alt={image.alt}
+          likes={image.likes}
+          create={image.create}
           onClick={() => onClick(image)}
         />
       ))}

@@ -40,28 +40,28 @@ const App = () => {
           },
         }
       );
-      const normalizadeData = response.data.result.map(
-        ({ alt_description, id, urls }) => ({
+      const normalizadeData = response.data.results.map(
+        ({ alt_description, id, urls, likes, created_at }) => ({
           alt: alt_description,
           id,
           small: urls.small,
           regular: urls.regular,
+          likes: likes,
+          create: created_at,
         })
       );
-
       if (pageNum === 1) {
         setImages(normalizadeData);
       } else {
         setImages((prevImages) => [...prevImages, ...normalizadeData]);
       }
+      setError(false);
 
-      setError("");
-
-      if (response.data.result.length === 0) {
+      if (response.data.results.length === 0) {
         setHasMoreImages(false);
       }
     } catch (error) {
-      setError("Whoops, something went wrong! Please try reloading this page!");
+      setError(true);
     } finally {
       setLoading(false);
     }
@@ -88,8 +88,8 @@ const App = () => {
   };
 
   const handleImageClick = (image) => {
-    setSelectedImage(null);
-    setIsModalOpen(false);
+    setSelectedImage(image);
+    setIsModalOpen(true);
   };
 
   const closeModal = () => {
@@ -101,13 +101,11 @@ const App = () => {
     <div>
       <SearchBar onSubmit={handleSearch} />
       {loading && <Loader />}
-      {error && <ErrorMessage message={error} />}
+      {error && <ErrorMessage />}
       {images.length > 0 && (
         <ImageGallery images={images} onClick={handleImageClick} />
       )}
-      {hasMoreImages && images.length > 0 && (
-        <LoadMoreBtn onClick={handleImageClick} />
-      )}
+      {hasMoreImages && images.length > 0 && <LoadMoreBtn onClick={loadMore} />}
       {selectedImage && (
         <ImageModal
           images={selectedImage}
