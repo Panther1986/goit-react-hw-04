@@ -118,6 +118,8 @@ const App = () => {
 
   const handleSearch = (query) => {
     setQuery(query);
+    setPage(1);
+    setImages([]);
   };
 
   const loadMore = () => {
