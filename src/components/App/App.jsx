@@ -70,8 +70,6 @@ const App = () => {
   useEffect(() => {
     if (query !== "") {
       fetchArticles(query, 1);
-      setPage(1);
-      setImages([]);
       setHasMoreImages(true);
     }
     if (page > 1) {

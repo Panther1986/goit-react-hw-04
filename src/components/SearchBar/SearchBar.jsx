@@ -3,7 +3,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { GoSearch } from "react-icons/go";
 import css from "./SearchBar.module.css";
 
-const SearchBar = ({ onSubmit, userNovalidValue }) => {
+const SearchBar = ({ onSubmit }) => {
   const [query, setQuery] = useState("");
   const handleSubmit = (e) => {
     e.preventDefault();
