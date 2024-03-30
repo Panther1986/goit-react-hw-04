@@ -20,61 +20,100 @@ const App = () => {
   const [page, setPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  async function fetchArticles(query, pageNum) {
-    try {
-      setLoading(true);
-      const MY_KEY = "3E1uqS10ft75HtW6n-WWxNngOMkfjOfuZz96c8u9lqU";
-      const params = {
-        client_id: MY_KEY,
-        query: query,
-        orientation: "landscape",
-        page: pageNum,
-        per_page: 12,
-      };
-      const response = await axios.get(
-        `https://api.unsplash.com/search/photos/`,
-        {
-          params: params,
-          headers: {
-            Authorization: `Client-ID ${MY_KEY}`,
-          },
-        }
-      );
-      const normalizadeData = response.data.results.map(
-        ({ alt_description, id, urls, likes, created_at }) => ({
-          alt: alt_description,
-          id,
-          small: urls.small,
-          regular: urls.regular,
-          likes: likes,
-          create: created_at,
-        })
-      );
-      if (pageNum === 1) {
-        setImages(normalizadeData);
-      } else {
-        setImages((prevImages) => [...prevImages, ...normalizadeData]);
-      }
-      setError(false);
+  // async function fetchArticles(query, pageNum) {
+  //   try {
+  //     setLoading(true);
+  //     const MY_KEY = "3E1uqS10ft75HtW6n-WWxNngOMkfjOfuZz96c8u9lqU";
+  //     const params = {
+  //       client_id: MY_KEY,
+  //       query: query,
+  //       orientation: "landscape",
+  //       page: pageNum,
+  //       per_page: 12,
+  //     };
+  //     const response = await axios.get(
+  //       `https://api.unsplash.com/search/photos/`,
+  //       {
+  //         params: params,
+  //         headers: {
+  //           Authorization: `Client-ID ${MY_KEY}`,
+  //         },
+  //       }
+  //     );
+  //     const normalizadeData = response.data.results.map(
+  //       ({ alt_description, id, urls, likes, created_at }) => ({
+  //         alt: alt_description,
+  //         id,
+  //         small: urls.small,
+  //         regular: urls.regular,
+  //         likes: likes,
+  //         create: created_at,
+  //       })
+  //     );
+  //     if (pageNum === 1) {
+  //       setImages(normalizadeData);
+  //     } else {
+  //       setImages((prevImages) => [...prevImages, ...normalizadeData]);
+  //     }
+  //     setError(false);
 
-      if (response.data.results.length === 0) {
-        setHasMoreImages(false);
-      }
-    } catch (error) {
-      setError(true);
-    } finally {
-      setLoading(false);
-    }
-  }
+  //     if (response.data.results.length === 0) {
+  //       setHasMoreImages(false);
+  //     }
+  //   } catch (error) {
+  //     setError(true);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // }
 
   useEffect(() => {
-    if (query !== "") {
-      fetchArticles(query, 1);
-      setHasMoreImages(true);
+    if (query === "") return;
+    async function fetchArticles() {
+      try {
+        setLoading(true);
+        const MY_KEY = "3E1uqS10ft75HtW6n-WWxNngOMkfjOfuZz96c8u9lqU";
+        const params = {
+          client_id: MY_KEY,
+          query: query,
+          orientation: "landscape",
+          page: page,
+          per_page: 12,
+        };
+        const response = await axios.get(
+          `https://api.unsplash.com/search/photos/`,
+          {
+            params: params,
+            headers: {
+              Authorization: `Client-ID ${MY_KEY}`,
+            },
+          }
+        );
+        const normalizadeData = response.data.results.map(
+          ({ alt_description, id, urls, likes, created_at }) => ({
+            alt: alt_description,
+            id,
+            small: urls.small,
+            regular: urls.regular,
+            likes: likes,
+            create: created_at,
+          })
+        );
+        if (response.data.results.length === 0) {
+          setHasMoreImages(false);
+          return;
+        }
+        setHasMoreImages(true);
+        setImages((prevImages) => [...prevImages, ...normalizadeData]);
+
+        setError(false);
+      } catch (error) {
+        setError(true);
+      } finally {
+        setLoading(false);
+      }
     }
-    if (page > 1) {
-      fetchArticles(query, page);
-    }
+    fetchArticles();
   }, [query, page]);
 
   const handleSearch = (query) => {
