@@ -1,12 +1,21 @@
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { GoSearch } from "react-icons/go";
 import css from "./SearchBar.module.css";
+import { FC } from "react";
 
-const SearchBar = ({ onSubmit }) => {
+interface SearchBarProps {
+  onSubmit: (query: string) => void;
+}
+
+const SearchBar: FC<SearchBarProps> = ({ onSubmit }) => {
   const [query, setQuery] = useState("");
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!/^[a-zA-Z\s]*$/.test(query.trim())) {
+      toast.error("❌ Please enter valid letters only.");
+      return;
+    }
 
     if (query.trim() === "") {
       toast.error("Please enter search image!");
@@ -15,6 +24,7 @@ const SearchBar = ({ onSubmit }) => {
     onSubmit(query);
     setQuery("");
   };
+
   return (
     <header className={css.headerContainer}>
       <form className={css.formSearch} onSubmit={handleSubmit}>

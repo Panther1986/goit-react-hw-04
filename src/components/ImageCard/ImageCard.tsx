@@ -1,5 +1,21 @@
+import { FC } from "react";
 import css from "./ImageCard.module.css";
-const ImageCard = ({ imageUrl, alt, onClick, likes, create }) => {
+
+interface ImageCardProps {
+  imageUrl: string;
+  alt: string;
+  likes: number;
+  create: number;
+  onClick: () => void;
+}
+
+const ImageCard: FC<ImageCardProps> = ({
+  imageUrl,
+  alt,
+  onClick,
+  likes,
+  create,
+}) => {
   return (
     <li>
       <div>

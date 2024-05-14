@@ -1,7 +1,16 @@
+import { FC } from "react";
 import ImageCard from "../ImageCard/ImageCard";
 import css from "./ImageGallery.module.css";
+import { Image } from "../App/App.type";
 
-const ImageGallery = ({ images, onClick }) => {
+interface ImageGalleryProps {
+  images: Image[];
+  likes: number;
+  create: number;
+  onClick: (image: Image) => void;
+}
+
+const ImageGallery: FC<ImageGalleryProps> = ({ images, onClick }) => {
   return (
     <div className={css.imageContainer}>
       <ul className={css.listImage}>
